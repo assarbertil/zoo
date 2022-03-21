@@ -1,16 +1,12 @@
-import { useState, useEffect } from "react";
 import { AnimalCard } from "../components/AnimalCard";
 import { AnimalGrid } from "../components/AnimalGrid";
 import { Heading } from "../components/Heading";
 import { Paragraph } from "../components/Paragraph";
+import { useAnimals } from "../contexts/AnimalContext";
 import { Animal } from "../interfaces/Animal";
-import { LS } from "../util/localStorage";
 
 export const HomePage = () => {
-  const [animals, setAnimals] = useState([]);
-  useEffect(() => {
-    setAnimals(LS.get("animals"));
-  }, []);
+  const { animals, setAnimals } = useAnimals();
 
   return (
     <>

@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import { globalCss } from "./stitches.config";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./routes/HomePage";
-import { setAnimalsOnLoad } from "./util/localStorage";
 import { AnimalPage } from "./routes/AnimalPage";
 
 const globalStyles = globalCss({

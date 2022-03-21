@@ -7,21 +7,34 @@ import { Heading } from "../components/Heading";
 import { Paragraph } from "../components/Paragraph";
 import { Animal } from "../interfaces/Animal";
 import { styled } from "../stitches.config";
-import { getAnimalByName, updateAnimalData } from "../util/localStorage";
+import { getAnimalByName } from "../util/animalFunctions";
+import { useAnimals } from "../contexts/AnimalContext";
 
 export const AnimalPage = () => {
+  const { updateAnimal } = useAnimals();
   const navigate = useNavigate();
   const { id } = useParams<"id">(); // Get the animal id from the url
-  const [animal, setAnimal] = useState<Animal>(() =>
-    getAnimalByName(id as string)
+  const { animals, setAnimals } = useAnimals();
+  const [animal, setAnimal] = useState<Animal | undefined>(() =>
+    getAnimalByName(animals, id as string)
   );
 
   const feedAnimal = () => {
+    if (animal === undefined) return;
+
     const newAnimal: Animal = { ...animal, isFed: true, lastFed: new Date() };
 
+    // Set our local animal
     setAnimal(newAnimal);
 
-    updateAnimalData(newAnimal);
+    // And set the animal in the global context
+    setAnimals(
+      animals.map((currentAnimal: Animal) =>
+        currentAnimal.name === animal.name ? newAnimal : currentAnimal
+      )
+    );
+
+    updateAnimal(newAnimal);
   };
 
   return (
@@ -51,7 +64,7 @@ export const AnimalPage = () => {
               {animal.isFed ? `${animal.name} är inte hungrig` : "Mata"}
             </Button>
 
-            <Description>
+            <Description asChild>
               <Paragraph>{animal.longDescription}</Paragraph>
             </Description>
           </DialogContent>

@@ -1,5 +1,3 @@
-import { Animal } from "../interfaces/Animal";
-
 // Basic local storage fns
 export const LS = {
   set(key: string, value: any) {
@@ -10,41 +8,4 @@ export const LS = {
     const parsed = JSON.parse(raw); // Returns parsed object
     return raw === "{}" ? null : parsed; // Returns null if empty
   },
-};
-
-// Runs on page load
-export const setAnimalsOnLoad = async () => {
-  const animals = LS.get("animals");
-  if (animals) return;
-
-  const response = await fetch("https://animals.azurewebsites.net/api/animals");
-  const data = await response.json();
-  LS.set("animals", data);
-};
-
-// Insert animal that should be updated
-export const updateAnimalData = (insertedAnimal: Animal) => {
-  const animals = LS.get("animals");
-
-  // Create new array of animals but update the one with inserted id
-  const updatedAnimals = animals.map((animalInArray: Animal) => {
-    if (animalInArray.id === insertedAnimal.id) {
-      return insertedAnimal;
-    }
-    return animalInArray;
-  });
-
-  LS.set("animals", updatedAnimals);
-};
-
-export const getAnimalByName = (name: string) => {
-  const animals = LS.get("animals");
-  return animals.find((animal: Animal) => animal.name === name);
-};
-
-export const timeSinceFed = (animal: Animal) => {
-  const now = new Date();
-  const lastFed = new Date(animal.lastFed);
-  const timeSinceFed = now.getTime() - lastFed.getTime();
-  return Math.floor(timeSinceFed / (1000 * 60 * 60)); // Multiply miliseconds to hours
 };
