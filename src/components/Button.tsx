@@ -9,9 +9,18 @@ export const Button = styled("button", {
   fontSize: "$h5",
   cursor: "pointer",
 
+  "&:disabled": {
+    opacity: 0.5,
+  },
+
   variants: {
     type: {
       primary: {
+        backgroundColor: "$pink9",
+        color: "$white",
+        "&:hover": { backgroundColor: "$pink10" },
+      },
+      secondary: {
         backgroundColor: "$pink4",
         color: "$pink11",
         "&:hover": { backgroundColor: "$pink5" },
@@ -20,6 +29,6 @@ export const Button = styled("button", {
     },
   },
   defaultVariants: {
-    type: "primary",
+    type: "secondary",
   },
 });

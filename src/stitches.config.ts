@@ -40,6 +40,7 @@ export const {
       64: "4rem",
       128: "8rem",
       256: "16rem",
+      512: "32rem",
     },
 
     space: {

@@ -27,17 +27,12 @@ export default function App() {
   // the <Routes> so we show the gallery in the background, behind the modal.
   const state = location.state as { backgroundLocation?: Location };
 
-  useEffect(() => {
-    setAnimalsOnLoad();
-  }, []);
-
   globalStyles();
 
   return (
     <Layout>
       <Routes location={state?.backgroundLocation || location}>
         <Route index element={<HomePage />} />
-        <Route path="/:id" element={<HomePage />} />
       </Routes>
 
       {/* Show the modal when a `backgroundLocation` is set */}

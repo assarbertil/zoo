@@ -1,13 +1,67 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
+import { Flex } from "../components/Flex";
 import { Heading } from "../components/Heading";
+import { Paragraph } from "../components/Paragraph";
 import { Animal } from "../interfaces/Animal";
 import { styled } from "../stitches.config";
-import { getAnimalByName } from "../util/localStorage";
+import { getAnimalByName, updateAnimalData } from "../util/localStorage";
 
-const StyledOverlay = styled(DialogPrimitive.Overlay, {
+export const AnimalPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<"id">(); // Get the animal id from the url
+  const [animal, setAnimal] = useState<Animal>(() =>
+    getAnimalByName(id as string)
+  );
+
+  const feedAnimal = () => {
+    const newAnimal: Animal = { ...animal, isFed: true, lastFed: new Date() };
+
+    setAnimal(newAnimal);
+
+    updateAnimalData(newAnimal);
+  };
+
+  return (
+    <>
+      {animal && (
+        <Dialog defaultOpen onOpenChange={() => navigate(-1)}>
+          <DialogContent>
+            <Flex justify="between">
+              <DialogTitle asChild>
+                <Heading type="h2" as="h2">
+                  {animal.name}
+                </Heading>
+              </DialogTitle>
+              <DialogClose asChild>
+                <Button>Stäng</Button>
+              </DialogClose>
+            </Flex>
+            <ImageContainer>
+              <Image src={animal.imageUrl} alt={`Bild på ${animal.name}`} />
+            </ImageContainer>
+            <Button
+              disabled={animal.isFed}
+              onClick={feedAnimal}
+              type="primary"
+              css={{ marginBottom: "$32", width: "100%" }}
+            >
+              {animal.isFed ? `${animal.name} är inte hungrig` : "Mata"}
+            </Button>
+
+            <Description>
+              <Paragraph>{animal.longDescription}</Paragraph>
+            </Description>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
+  );
+};
+
+const Backdrop = styled(DialogPrimitive.Overlay, {
   backgroundColor: "$pink12Alpha",
   position: "fixed",
   inset: 0,
@@ -15,17 +69,17 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
 
 const StyledContent = styled(DialogPrimitive.Content, {
   backgroundColor: "$white",
-  borderRadius: 6,
-  boxShadow:
-    "hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px",
+  borderRadius: "$8",
+  boxShadow: "$medium",
   position: "fixed",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "90vw",
-  maxWidth: "450px",
+  maxWidth: "$512",
   maxHeight: "85vh",
-  padding: 25,
+  padding: "$32",
+  overflow: "auto",
 });
 
 interface ContentProps {
@@ -35,56 +89,33 @@ interface ContentProps {
 const Content: FC<ContentProps> = ({ children, ...props }) => {
   return (
     <DialogPrimitive.Portal>
-      <StyledOverlay />
+      <Backdrop />
       <StyledContent {...props}>{children}</StyledContent>
     </DialogPrimitive.Portal>
   );
 };
 
-const StyledTitle = styled(DialogPrimitive.Title, {
-  margin: 0,
-  fontWeight: 500,
-  color: "$pink12",
-  fontSize: 17,
-});
-
-const StyledDescription = styled(DialogPrimitive.Description, {
-  margin: "10px 0 20px",
-  color: "$pink11",
-  fontSize: 15,
-  lineHeight: 1.5,
-});
-
 const Dialog = DialogPrimitive.Root;
 const DialogContent = Content;
-const DialogTitle = StyledTitle;
-const DialogDescription = StyledDescription;
+const DialogTitle = DialogPrimitive.Title;
+const Description = DialogPrimitive.Description;
 const DialogClose = DialogPrimitive.Close;
 
-export const AnimalPage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams<"id">(); // Get the animal id from the url
-  const [animal, setAnimal] = useState<Animal>(() =>
-    getAnimalByName(id as string)
-  );
+const ImageContainer = styled("div", {
+  width: "100%",
+  marginBottom: "$16",
+});
 
-  return (
-    <>
-      {animal && (
-        <Dialog defaultOpen onOpenChange={() => navigate(-1)}>
-          <DialogContent>
-            <DialogTitle asChild>
-              <Heading type="h2" as="h2">
-                {animal.name}
-              </Heading>
-            </DialogTitle>
-            <DialogDescription>{animal.longDescription}</DialogDescription>
-            <DialogClose asChild>
-              <Button>Stäng</Button>
-            </DialogClose>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
-  );
-};
+const Image = styled("img", {
+  borderRadius: "$8",
+  marginY: "$32",
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  objectPosition: "center",
+  aspectRatio: "4 / 3",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "$pink11",
+});
