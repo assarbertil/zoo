@@ -27,7 +27,7 @@ export const AnimalPage = () => {
   }, [animal]);
 
   useEffect(() => {
-    if (animal && timeSinceFedState >= 22) {
+    if (animal && timeSinceFedState >= 180) {
       const newAnimal = { ...animal, isFed: false };
 
       setAnimal(newAnimal); // Set our local animal
@@ -66,12 +66,31 @@ export const AnimalPage = () => {
               disabled={animal.isFed}
               onClick={feedAnimal}
               type="primary"
-              css={{ marginBottom: "$32", width: "100%" }}
+              css={{ width: "100%", marginBottom: "$32" }}
             >
               {animal.isFed ? `${animal.name} är inte hungrig` : "Mata"}
             </Button>
-
-            <Paragraph>{timeSinceFedState}</Paragraph>
+            {timeSinceFedState >= 180 && (
+              <>
+                <Paragraph
+                  css={{
+                    marginTop: "$4",
+                    textAlign: "center",
+                  }}
+                >
+                  Hungrig!
+                </Paragraph>
+                <Paragraph
+                  css={{
+                    marginBottom: "$32",
+                    marginTop: "$4",
+                    textAlign: "center",
+                  }}
+                >
+                  Matad för {timeSinceFedState} minuter sedan.
+                </Paragraph>
+              </>
+            )}
 
             <Description asChild>
               <Paragraph>{animal.longDescription}</Paragraph>

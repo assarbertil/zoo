@@ -1,7 +1,9 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAnimals } from "../contexts/AnimalContext";
 import { Animal } from "../interfaces/Animal";
 import { styled } from "../stitches.config";
+import { timeSinceFed } from "../util/animalFunctions";
 import { Button } from "./Button";
 import { Flex } from "./Flex";
 import { Heading } from "./Heading";
@@ -13,6 +15,26 @@ interface Props {
 
 export const AnimalCard: FC<Props> = ({ animal }) => {
   let location = useLocation();
+  const [timeSinceFedState, setTimeSinceFedState] = useState<number>(0);
+  const [hungry, setHungry] = useState(false);
+  const { animals } = useAnimals();
+
+  useEffect(() => {
+    setTimeSinceFedState(timeSinceFed(animal));
+  }, [animal]);
+
+  useEffect(() => {
+    if (timeSinceFedState >= 240) {
+      setHungry(true);
+    }
+  }, [timeSinceFedState]);
+
+  // If global list of animals updates, check if time since fed is greater than 240
+  useEffect(() => {
+    if (timeSinceFedState <= 240) {
+      setHungry(false);
+    }
+  }, [animals]);
 
   return (
     <CardContainer
@@ -33,7 +55,7 @@ export const AnimalCard: FC<Props> = ({ animal }) => {
           >
             {animal.name}
           </Heading>
-          <Paragraph type="small">180min</Paragraph>
+          <Paragraph type="small">{hungry && "Hungrig"}</Paragraph>
         </Flex>
         <ImageContainer>
           <Image src={animal.imageUrl} alt={`Bild på ${animal.name}`} />
