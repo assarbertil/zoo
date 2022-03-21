@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Animal } from "../interfaces/Animal";
 import { styled } from "../stitches.config";
 import { Button } from "./Button";
@@ -12,8 +12,16 @@ interface Props {
 }
 
 export const AnimalCard: FC<Props> = ({ animal }) => {
+  let location = useLocation();
+
   return (
-    <CardContainer to={animal.name}>
+    <CardContainer
+      to={animal.name}
+      // This is the trick! Set the `backgroundLocation` in location state
+      // so that when we open the modal we still see the current page in
+      // the background.
+      state={{ backgroundLocation: location }}
+    >
       <div>
         <Flex justify="between">
           <Heading

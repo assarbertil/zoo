@@ -36,3 +36,8 @@ export const updateAnimalData = (insertedAnimal: Animal) => {
 
   LS.set("animals", updatedAnimals);
 };
+
+export const getAnimalByName = (name: string) => {
+  const animals = LS.get("animals");
+  return animals.find((animal: Animal) => animal.name === name);
+};

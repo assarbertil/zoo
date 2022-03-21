@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import { globalCss } from "./stitches.config";
 import { Layout } from "./components/Layout";
-import { Home } from "./routes/Home";
+import { HomePage } from "./routes/HomePage";
 import { setAnimalsOnLoad } from "./util/localStorage";
+import { AnimalPage } from "./routes/AnimalPage";
 
 const globalStyles = globalCss({
   "*": {
@@ -19,8 +20,14 @@ const globalStyles = globalCss({
 });
 
 export default function App() {
+  const location = useLocation();
+
+  // The `backgroundLocation` state is the location that we were at when one of
+  // the gallery links was clicked. If it's there, use it as the location for
+  // the <Routes> so we show the gallery in the background, behind the modal.
+  const state = location.state as { backgroundLocation?: Location };
+
   useEffect(() => {
-    console.log("App useEffect");
     setAnimalsOnLoad();
   }, []);
 
@@ -28,11 +35,17 @@ export default function App() {
 
   return (
     <Layout>
-      <BrowserRouter>
+      <Routes location={state?.backgroundLocation || location}>
+        <Route index element={<HomePage />} />
+        <Route path="/:id" element={<HomePage />} />
+      </Routes>
+
+      {/* Show the modal when a `backgroundLocation` is set */}
+      {state?.backgroundLocation && (
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/:id" element={<AnimalPage />} />
         </Routes>
-      </BrowserRouter>
+      )}
     </Layout>
   );
 }

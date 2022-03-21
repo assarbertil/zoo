@@ -76,6 +76,8 @@ export const {
       pink11: "#cd1d8d",
       pink12: "#3b0a2a",
 
+      pink12Alpha: "hsla(321, 99.8%, 10.0%, 0.5)",
+
       white: "#fff",
       shadowLowColor: "hsl(322 75.0% 46.0% / 0.3)",
       shadowMediumColor: "hsl(322 75.0% 46.0% / 0.3)",
