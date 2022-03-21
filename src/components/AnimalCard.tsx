@@ -50,6 +50,8 @@ export const AnimalCard: FC<Props> = ({ animal }) => {
   );
 };
 
+// Below are only styled components
+
 const ImageContainer = styled("div", {
   width: "100%",
   marginBottom: "$16",

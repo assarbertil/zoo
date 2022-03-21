@@ -1,5 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Flex } from "../components/Flex";
@@ -7,34 +7,41 @@ import { Heading } from "../components/Heading";
 import { Paragraph } from "../components/Paragraph";
 import { Animal } from "../interfaces/Animal";
 import { styled } from "../stitches.config";
-import { getAnimalByName } from "../util/animalFunctions";
+import { getAnimalByName, timeSinceFed } from "../util/animalFunctions";
 import { useAnimals } from "../contexts/AnimalContext";
 
 export const AnimalPage = () => {
-  const { updateAnimal } = useAnimals();
   const navigate = useNavigate();
   const { id } = useParams<"id">(); // Get the animal id from the url
-  const { animals, setAnimals } = useAnimals();
+  const { animals, updateAnimal } = useAnimals(); // Get the animals from the context
+  // Currently shown animal
   const [animal, setAnimal] = useState<Animal | undefined>(() =>
     getAnimalByName(animals, id as string)
   );
+  const [timeSinceFedState, setTimeSinceFedState] = useState<number>(0);
+
+  useEffect(() => {
+    if (animal) {
+      setTimeSinceFedState(timeSinceFed(animal));
+    }
+  }, [animal]);
+
+  useEffect(() => {
+    if (animal && timeSinceFedState >= 22) {
+      const newAnimal = { ...animal, isFed: false };
+
+      setAnimal(newAnimal); // Set our local animal
+      updateAnimal(newAnimal); // Set our global animals
+    }
+  }, [timeSinceFedState]);
 
   const feedAnimal = () => {
     if (animal === undefined) return;
 
     const newAnimal: Animal = { ...animal, isFed: true, lastFed: new Date() };
 
-    // Set our local animal
-    setAnimal(newAnimal);
-
-    // And set the animal in the global context
-    setAnimals(
-      animals.map((currentAnimal: Animal) =>
-        currentAnimal.name === animal.name ? newAnimal : currentAnimal
-      )
-    );
-
-    updateAnimal(newAnimal);
+    setAnimal(newAnimal); // Set our local animal
+    updateAnimal(newAnimal); // Set our global animals
   };
 
   return (
@@ -64,6 +71,8 @@ export const AnimalPage = () => {
               {animal.isFed ? `${animal.name} är inte hungrig` : "Mata"}
             </Button>
 
+            <Paragraph>{timeSinceFedState}</Paragraph>
+
             <Description asChild>
               <Paragraph>{animal.longDescription}</Paragraph>
             </Description>
@@ -74,6 +83,7 @@ export const AnimalPage = () => {
   );
 };
 
+// Below are only styled components
 const Backdrop = styled(DialogPrimitive.Overlay, {
   backgroundColor: "$pink12Alpha",
   position: "fixed",
