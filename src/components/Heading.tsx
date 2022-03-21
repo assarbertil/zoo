@@ -1,9 +1,9 @@
-import { styled } from "../../stitches.config";
+import { styled } from "../stitches.config";
 
 export const Heading = styled("h1", {
-  color: "$plum12",
+  color: "$pink12",
   lineHeight: "$base",
-  fontWeight: 500,
+  fontWeight: 600,
 
   variants: {
     type: {

@@ -12,8 +12,7 @@ export const {
 } = createStitches({
   theme: {
     fonts: {
-      system:
-        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+      Rubik: "'Rubik', sans-serif",
     },
     fontSizes: {
       h1: "3rem",
@@ -42,18 +41,18 @@ export const {
     },
 
     colors: {
-      plum1: "#fefcff",
-      plum2: "#fff8ff",
-      plum3: "#fceffc",
-      plum4: "#f9e5f9",
-      plum5: "#f3d9f4",
-      plum6: "#ebc8ed",
-      plum7: "#dfafe3",
-      plum8: "#cf91d8",
-      plum9: "#ab4aba",
-      plum10: "#a43cb4",
-      plum11: "#9c2bad",
-      plum12: "#340c3b",
+      pink1: "#fffcfe",
+      pink2: "#fff7fc",
+      pink3: "#feeef8",
+      pink4: "#fce5f3",
+      pink5: "#f9d8ec",
+      pink6: "#f3c6e2",
+      pink7: "#ecadd4",
+      pink8: "#e38ec3",
+      pink9: "#d6409f",
+      pink10: "#d23197",
+      pink11: "#cd1d8d",
+      pink12: "#3b0a2a",
     },
   },
   media: {
