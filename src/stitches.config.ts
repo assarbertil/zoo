@@ -28,7 +28,9 @@ export const {
     },
     lineHeights: { base: 1.5 },
 
-    space: {
+    sizes: {
+      1: "0.0625rem",
+      2: "0.125rem",
       4: "0.25rem",
       8: "0.5rem",
       16: "1rem",
@@ -38,6 +40,26 @@ export const {
       64: "4rem",
       128: "8rem",
       256: "16rem",
+    },
+
+    space: {
+      1: "0.0625rem",
+      2: "0.125rem",
+      4: "0.25rem",
+      8: "0.5rem",
+      16: "1rem",
+      24: "1.5rem",
+      32: "2rem",
+      48: "3rem",
+      64: "4rem",
+      128: "8rem",
+      256: "16rem",
+    },
+
+    radii: {
+      4: "0.25rem",
+      8: "0.5rem",
+      16: "1rem",
     },
 
     colors: {
@@ -53,6 +75,17 @@ export const {
       pink10: "#d23197",
       pink11: "#cd1d8d",
       pink12: "#3b0a2a",
+
+      white: "#fff",
+      shadowLowColor: "hsl(322 75.0% 46.0% / 0.3)",
+      shadowMediumColor: "hsl(322 75.0% 46.0% / 0.3)",
+    },
+
+    shadows: {
+      low: "0 0.5px 0.7px $colors$shadowLowColor, 0 0.8px 1px -1.2px $colors$shadowLowColor, 0 2px 2.5px -2.5px $colors$shadowLowColor",
+
+      medium:
+        "0 0.5px 0.7px $colors$shadowMediumColor, 0 1.6px 2px -0.8px $colors$shadowMediumColor, 0 4.1px 5.2px -1.7px $colors$shadowMediumColor, 0 10px 12.6px -2.5px $colors$shadowMediumColor",
     },
   },
   media: {
@@ -63,9 +96,21 @@ export const {
     "2xl": "(min-width: 1536px)",
   },
   utils: {
+    marginY: (value: number | string) => ({
+      marginTop: value,
+      marginBottom: value,
+    }),
     marginX: (value: number | string) => ({
       marginLeft: value,
       marginRight: value,
+    }),
+    paddingX: (value: number | string) => ({
+      paddingLeft: value,
+      paddingRight: value,
+    }),
+    paddingY: (value: number | string) => ({
+      paddingTop: value,
+      paddingBottom: value,
     }),
   },
 });

@@ -1,6 +1,6 @@
 import { styled } from "../stitches.config";
 
-export const Header = styled("p", {
+export const Paragraph = styled("p", {
   color: "$pink11",
   lineHeight: "$base",
   fontWeight: 400,

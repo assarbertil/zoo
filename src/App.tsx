@@ -7,7 +7,11 @@ import { Home } from "./routes/Home";
 import { setAnimalsOnLoad } from "./util/localStorage";
 
 const globalStyles = globalCss({
-  "*": { margin: 0, padding: 0 },
+  "*": {
+    margin: 0,
+    padding: 0,
+    boxSizing: "border-box",
+  },
   html: {
     fontFamily: "$Rubik",
     backgroundColor: "$pink2",
